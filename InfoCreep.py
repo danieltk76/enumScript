@@ -1,31 +1,39 @@
 # returns status code for web url
 import requests
 import sys
-print("""     ,%&& %&& %
-   ,%&%& %&%& %&
-  %& %&% &%&% % &%
- % &%% %&% &% %&%&,
- &%&% %&%& %& &%& %
-%%& %&%& %&%&% %&%%&
-&%&% %&% % %& &% %%&
-&& %&% %&%& %&% %&%'
- '%&% %&% %&&%&%%'%
-  % %& %& %&% &%%
-    `\%%.'  /`%&'
-      |    |            /`-._           _\\/
-      |,   |_          /     `-._ ..--~`_
-      |;   |_`\_      /  ,\\.~`  `-._ -  ^
-      |;:  |/^}__..-,@   .~`    ~    `o ~
-      |;:  |(____.-'     '.   ~   -    `    ~
-      |;:  |  \ / `\       //.  -    ^   ~
-      |;:  |\ /' /\_\_        ~. _ ~   -   //-
-    \\/;:   \'--' `---`           `\\//-\\///""")
 
+welcome_shown = False
 run = True
 while run: 
+    if not welcome_shown:
+        print("""     
+                    ,%&& %&& %
+                    ,%&%& %&%& %&
+                    %& %&% &%&% % &%
+                    % &%% %&% &% %&%&,
+                    &%&% %&%& %& &%& %
+                    %%& %&%& %&%&% %&%%&
+                    &%&% %&% % %& &% %%&
+                    && %&% %&%& %&% %&%'
+                    '%&% %&% %&&%&%%'%
+                    % %& %& %&% &%%
+                        `\%%.'  /`%&'
+                        |    |            /`-._           _\\/
+                        |,   |_          /     `-._ ..--~`_
+                        |;   |_`\_      /  ,\\.~`  `-._ -  ^
+                        |;:  |/^}__..-,@   .~`    ~    `o ~
+                        |;:  |(____.-'     '.   ~   -    `    ~
+                        |;:  |  \ / `\       //.  -    ^   ~
+                        |;:  |\ /' /\_\_        ~. _ ~   -   //-
+                        \\/;:   \'--' `---`           `\\//-\\///""")
+        print("Welcome to InfoCreep. Enter -h for help! ")
+        welcome_shown = True
     # we need to establish some key commands...and some ascii art
+    if welcome_shown:
+        command = input("> ")
+    else:
+        command = input("Welcome to InfoCreep. Enter -h for help! ")
 
-    command = input("Welcome to InfoCreep. Enter -h for help! ")
     if command == "-h":
         print("""I hope these help: 
             -h                     --> help menu
