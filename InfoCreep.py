@@ -1,11 +1,31 @@
 # returns status code for web url
 import requests
 import sys
+print("""     ,%&& %&& %
+   ,%&%& %&%& %&
+  %& %&% &%&% % &%
+ % &%% %&% &% %&%&,
+ &%&% %&%& %& &%& %
+%%& %&%& %&%&% %&%%&
+&%&% %&% % %& &% %%&
+&& %&% %&%& %&% %&%'
+ '%&% %&% %&&%&%%'%
+  % %& %& %&% &%%
+    `\%%.'  /`%&'
+      |    |            /`-._           _\\/
+      |,   |_          /     `-._ ..--~`_
+      |;   |_`\_      /  ,\\.~`  `-._ -  ^
+      |;:  |/^}__..-,@   .~`    ~    `o ~
+      |;:  |(____.-'     '.   ~   -    `    ~
+      |;:  |  \ / `\       //.  -    ^   ~
+      |;:  |\ /' /\_\_        ~. _ ~   -   //-
+ jgs\\/;:   \'--' `---`           `\\//-\\///""")
 
 run = True
 while run: 
-    # we need to establish some key commandss
-    entry_command = input("Welcome to our recon tool. enter -h for help! ")
+    # we need to establish some key commands
+    
+    entry_command = input("Welcome to InfoCreep. Enter -h for help! ")
     if entry_command == "-h":
         print("""I hope these help: 
             -h                     --> help menu
