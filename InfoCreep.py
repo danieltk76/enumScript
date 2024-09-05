@@ -1,6 +1,8 @@
 # returns status code for web url
 import requests
 import sys
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
 
 welcome_shown = False
 run = True
