@@ -1,59 +1,45 @@
 # returns status code for web url
 import requests
 import sys
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
+import ipaddress
+from NetworkTools import NetworkTools
+from urllib.parse import urlparse
 
-welcome_shown = False
-run = True
-while run: 
-    if not welcome_shown:
-        print("""     
-                    ,%&& %&& %
-                    ,%&%& %&%& %&
-                    %& %&% &%&% % &%
-                    % &%% %&% &% %&%&,
-                    &%&% %&%& %& &%& %
-                    %%& %&%& %&%&% %&%%&
-                    &%&% %&% % %& &% %%&
-                    && %&% %&%& %&% %&%'
-                    '%&% %&% %&&%&%%'%
-                    % %& %& %&% &%%
-                        `\%%.'  /`%&'
-                        |    |            /`-._           _\\/
-                        |,   |_          /     `-._ ..--~`_
-                        |;   |_`\_      /  ,\\.~`  `-._ -  ^
-                        |;:  |/^}__..-,@   .~`    ~    `o ~
-                        |;:  |(____.-'     '.   ~   -    `    ~
-                        |;:  |  \ / `\       //.  -    ^   ~
-                        |;:  |\ /' /\_\_        ~. _ ~   -   //-
-                        \\/;:   \'--' `---`           `\\//-\\///""")
-        print("Welcome to InfoCreep. Enter -h for help! ")
-        welcome_shown = True
-    # we need to establish some key commands...and some ascii art
-    if welcome_shown:
-        command = input("> ")
-    else:
-        command = input("Welcome to InfoCreep. Enter -h for help! ")
+def is_valid_ip(ip):
+    try:
+        ipaddress.ip_address(ip)
+        return True
+    except ValueError:
+        return False
 
-    if command == "-h":
-        print("""I hope these help: 
-            -h                     --> help menu
-            scout http://target ip --> gain server code recon on target
-            dnsRec <target ip>     --> use View.DNS through the shell, currently expanding""")
-    elif command.startswith("scout "):
-        target_url = command.split("scout ")[1]
+def extract_domain(url):
+    parsed_url = urlparse(url)
+    return parsed_url.netloc or parsed_url.path
 
-        try:
-            r = requests.get(target_url)
-            print(f"Status Code for {target_url}: {r.status_code}")
+def run_info_creep():
+    is_windows = input("Are you using Windows? (y/n): ").strip().lower() == 'y'
+    network_tools = NetworkTools(is_windows)
 
-        except requests.exceptions.RequestException as e:
-            # Handle any request-related exceptions
-            print(f"Error connecting to {target_url}: {e}")
-    
-    elif command.lower() == "exit":
-        print("Exiting InfoCreep...")
-        break
+    run = True
+    while run:
+        command = input("> ").strip().lower()
         
-            
+        if command == "-h":
+            print_help()
+        elif command.startswith("creep "):
+            target = command.split("creep ")[1]
+            result = network_tools.dnsRec(target)
+            print(result)
+        elif command == "exit":
+            run = False
+        else:
+            print("Invalid command. Use -h for help.")
+
+def print_help():
+    print("I hope these help:")
+    print("            -h                     --> help menu")
+    print("            creep <target>         --> perform DNS lookup and network scan on target")
+    print("            exit                   --> exit the program")
+
+if __name__ == "__main__":
+    run_info_creep()
