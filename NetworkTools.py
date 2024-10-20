@@ -44,36 +44,43 @@ class NetworkTools:
 
     def dnsRec(self, target):
         ip = self.resolve_to_ip(target)
-        print(f"Performing DNS lookup and scan for {ip}...")
+        os_type = "Windows" if self.is_windows else "Unix/Linux"
+        print(f"Performing scan on {ip}... (attacker: {os_type})")
         
-        # DNS lookup
+        dns_result = self.perform_dns_lookup(ip)
+        whois_result = self.perform_whois_lookup(ip)
+        port_scan_result = self.perform_port_scan(ip)
+        
+        return self.format_output(ip, dns_result, whois_result, port_scan_result)
+
+    def perform_dns_lookup(self, ip):
         if self.is_windows:
-            dns_result = self.run_command(f"nslookup {ip}")
+            return self.run_command(f"nslookup {ip}")
         else:
-            dns_result = self.run_command(f"dig {ip}")
-        
-        # WHOIS lookup
+            return self.run_command(f"dig {ip}")
+
+    def perform_whois_lookup(self, ip):
         if self.is_windows:
-            whois_result = "WHOIS lookup not available on Windows"
+            return "WHOIS lookup not available on Windows"
         else:
-            whois_result = self.run_command(f"whois {ip}")
-        
-        # Port scan
+            return self.run_command(f"whois {ip}")
+
+    def perform_port_scan(self, ip):
         if self.nmap_available:
             nmap_result = self.run_command(f"nmap -sV {ip}")
             if "open" not in nmap_result:
-                port_scan_result = self.format_no_open_ports()
+                return self.format_no_open_ports()
             else:
-                port_scan_result = "See NMAP results"
+                return "See NMAP results\n" + nmap_result
         else:
-            nmap_result = "NMAP not available"
             common_ports = [21, 22, 23, 25, 53, 80, 110, 143, 443, 465, 587, 993, 995, 3306, 3389, 5900, 8080]
             open_ports = self.simple_port_scan(ip, common_ports)
             if open_ports:
-                port_scan_result = "\n".join([f"Port {port} is open" for port in open_ports])
+                return "\n".join([f"Port {port} is open" for port in open_ports])
             else:
-                port_scan_result = self.format_no_open_ports()
-        
+                return self.format_no_open_ports()
+
+    def format_output(self, ip, dns_result, whois_result, port_scan_result):
         formatted_output = f"DNS Information for {ip}:\n"
         formatted_output += "=" * 40 + "\n"
         formatted_output += dns_result + "\n\n"
@@ -82,10 +89,7 @@ class NetworkTools:
         formatted_output += whois_result + "\n\n"
         formatted_output += f"Port Scan Results for {ip}:\n"
         formatted_output += "=" * 40 + "\n"
-        if self.nmap_available:
-            formatted_output += nmap_result
-        else:
-            formatted_output += port_scan_result
+        formatted_output += port_scan_result
         
         return formatted_output
 

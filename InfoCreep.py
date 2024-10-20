@@ -17,7 +17,15 @@ def extract_domain(url):
     return parsed_url.netloc or parsed_url.path
 
 def run_info_creep():
-    is_windows = input("Are you using Windows? (y/n): ").strip().lower() == 'y'
+    user_input = input("Are you using Windows? (y/n): ").strip().lower()
+    is_windows = user_input == 'y'
+    os_type = "Windows" if is_windows else "Linux"
+    
+    if user_input not in ['y', 'n']:
+        print("Invalid input. Defaulting to Linux.")
+        is_windows = False
+        os_type = "Linux"
+    
     network_tools = NetworkTools(is_windows)
 
     run = True
@@ -28,6 +36,7 @@ def run_info_creep():
             print_help()
         elif command.startswith("creep "):
             target = command.split("creep ")[1]
+            print(f"Scanning {target} from {os_type} attacker...")
             result = network_tools.dnsRec(target)
             print(result)
         elif command == "exit":
